@@ -1,0 +1,96 @@
+# HYSYS Heat Exchanger Optimizer - Quick Start Guide
+
+## Installation
+
+Run this command to install all dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Or install individually:
+```bash
+pip install pywin32 pandas numpy matplotlib pyyaml openpyxl
+```
+
+## Prerequisites
+
+- **ASPEN HYSYS v14** must be installed on your system
+- HYSYS case file with at least one heat exchanger
+
+## Usage
+
+### Step 1: Configure
+
+Edit `config.yaml` and update:
+- `heat_exchanger.name` - Name of your heat exchanger in HYSYS
+- `heat_exchanger.streams` - Names of inlet/outlet streams
+- `optimization.delta_tmin_range` - Min/max Delta Tmin values (default: 8-15°C)
+
+### Step 2: Run
+
+```bash
+python hysys_hx_optimizer.py
+```
+
+### Step 3: View Results
+
+Results are saved in `outs/run_YYYYMMDD_HHMMSS/`:
+- `SUMMARY.txt` - Quick overview
+- `data/optimization_results.xlsx` - Full data
+- `plots/optimization_results.png` - Visualization
+- `logs/optimization.log` - Execution log
+
+## Configuration Tips
+
+### Heat Transfer Coefficient (U)
+- Water-Water: 800-1500 W/m²-K
+- Oil-Water: 100-400 W/m²-K
+- Steam-Water: 1500-4000 W/m²-K
+
+### Delta Tmin Range
+- Smaller values → Larger area, higher CAPEX, lower OPEX
+- Larger values → Smaller area, lower CAPEX, higher OPEX
+- Typical range: 5-30°C
+
+## Troubleshooting
+
+**HYSYS connection fails:**
+- Ensure HYSYS v14 is installed
+- Run Python as Administrator
+- Check case file path in config.yaml
+
+**Heat exchanger not found:**
+- Verify HX name is correct (case-sensitive)
+- Ensure case file is converged in HYSYS
+
+**Module not found errors:**
+- Run: `pip install -r requirements.txt`
+
+## File Structure
+
+```
+Extra/
+├── hysys_hx_optimizer.py      # Main script
+├── hysys_interface.py          # HYSYS connection
+├── heat_exchanger_extractor.py # Data extraction
+├── deltaTmin_optimizer.py      # Optimization logic
+├── capex_calculator.py         # CAPEX calculations
+├── opex_calculator.py          # OPEX calculations
+├── utils.py                    # Helper functions
+├── config.yaml                 # Configuration
+├── requirements.txt            # Dependencies
+├── data/                       # HYSYS case files
+└── outs/                       # Results (auto-created)
+```
+
+## Example Output
+
+```
+OPTIMAL HEAT EXCHANGER DESIGN
+======================================================================
+Delta Tmin:        15.00 °C
+Required Area:     38.12 m²
+CAPEX:            $73,351
+Annual OPEX:      $159,819/year
+Total Cost (NPV): $1,055,370
+```

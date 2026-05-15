@@ -1,0 +1,29 @@
+# HYSYS simulation files (binary/large)
+*.hsc
+*.bk0
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Output files
+outs/
+*.log
+
+# Images and PDFs (generated outputs)
+*.png
+*.pdf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Scratch/temp
+scratch/

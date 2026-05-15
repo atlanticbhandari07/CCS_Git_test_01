@@ -1,0 +1,131 @@
+# ASPEN HYSYS Heat Exchanger Optimization Configuration
+# This file contains all user-configurable parameters for the optimization
+
+# HYSYS Configuration
+hysys:
+  version: 14
+  case_file_path: r"d:\BUUU\New simulation with new CAPEX sheet base case with spreadsheet 15 DelTmin.hsc" # previously: "D:/Motey/New simulation.hsc"
+  visible: true  
+
+# Heat Exchanger Configuration
+heat_exchanger:
+  name: "E-100"  
+  
+  # Stream names in HYSYS
+  streams:
+    hot_inlet: "Lean MEA 2"
+    hot_outlet: "Lean MEA 3"
+    cold_inlet: "Rich MEA 2"
+    cold_outlet: "Rich MEA 3"
+    
+    # Optional energy stream for duty extraction (e.g. "Reboiler Duty")
+    # If provided, OPEX consumption will use this stream's Heat Flow
+    duty_stream: "Q-100"
+  
+  # Flow configuration
+  flow_config: "counter-current"  
+  
+  # Overall heat transfer coefficient (W/m²-K)
+  # If not specified, will try to extract from HYSYS
+  overall_U: 1.5
+  
+  # Design pressure (kPa)
+  design_pressure: 800.0
+
+# Delta Tmin Optimization Parameters
+optimization:
+  # Delta Tmin range for optimization (°C)
+  delta_tmin_min: 8.0
+  delta_tmin_max: 15.0
+  
+  # Number of points to evaluate (8 points gives exact integers: 8, 9, 10, 11, 12, 13, 14, 15)
+  num_points: 8        # Number of points to evaluate in the range
+  
+  # HYSYS Adjust Block to control Delta Tmin (optional)
+  adjust_block: "ADJ-2"
+
+# CAPEX Configuration
+capex:
+  # Reference (base) equipment cost and area — user-defined
+  # C1: base equipment cost (EUR) for the reference area A1
+  base_cost: 1662000.0
+  # A1: reference area (m²) corresponding to base_cost
+  base_area: 2747.0
+
+  # Scaling exponent (six-tenths rule default = 0.6)
+  # C = C1 × (A / A1) ^ scaling_exponent
+  scaling_exponent: 1.0
+
+  # Installation factor (multiplied with equipment cost to get total CAPEX)
+  # Total CAPEX = Equipment Cost × installation_factor
+  installation_factor: 5.3
+
+# OPEX Configuration
+opex:
+  # Annual operating hours
+  operating_hours: 8000  # hours/year 
+  
+  # Utility type for hot stream
+  # Options: "steam", "hot_oil"
+  hot_utility_type: "steam"
+  
+  # Utility type for cold stream
+  cold_utility_type: "cooling_water"
+  
+  # Utility costs
+  utility_costs:
+    # Heating utilities (EUR/KWh) - Single steam cost
+    steam_cost: 0.015
+    
+    # Cooling utilities
+    cooling_water_cost: 0.0  # EUR/m³
+    
+    # Electricity (EUR/kWh)
+    electricity_cost: 0.05
+  
+  # Maintenance cost (as fraction of CAPEX per year)
+  #maintenance_factor: 0.04  # 4% of CAPEX per year
+  
+  # Pumping parameters
+  pumping:
+    #pressure_drop_hot: 50.0   # kPa
+    #pressure_drop_cold: 50.0  # kPa
+    #pump_efficiency: 0.75
+
+# Economic Parameters
+economics:
+  discount_rate: 0.075      # 7.5% discount rate
+  project_lifetime: 25     # years
+  
+  # Currency
+  currency: "EUR"
+
+# Output Configuration
+output:
+  # Results directory
+  results_dir: "outs"
+  
+  # File formats
+  export_csv: true
+  export_excel: true
+  
+  # Plotting
+  generate_plots: true
+  plot_format: "png"  # Options: "png", "pdf", "svg"
+  plot_dpi: 300
+  
+  # Logging
+  log_level: "INFO"  # Options: "DEBUG", "INFO", "WARNING", "ERROR"
+  log_file: "optimization.log"
+
+# Advanced Options
+advanced:
+  # Whether to use LMTD correction factor
+  use_lmtd_correction: false
+  
+  # Shell and tube configuration (if using correction factor)
+  #num_shell_passes: 1
+  #num_tube_passes: 2
+  
+  # Cooling water temperature rise (°C)
+  #cooling_water_temp_rise: 10.0
